@@ -1,10 +1,6 @@
-import 'package:client/mobile_dashboard.dart';
-import 'package:client/web_dashboard.dart';
+import 'package:client/presentation/mobile/screens/mobile_dashboard_screen.dart';
+import 'package:client/presentation/web/screens/web_dashboard_screen.dart';
 import 'package:flutter/material.dart';
-
-// Importa os teus ficheiros aqui (ou cola as classes abaixo se estiveres a testar num só ficheiro)
-// import 'mobile_list_screen.dart';
-// import 'web_dashboard.dart';
 
 void main() {
   runApp(const PackageTrackApp());
@@ -22,11 +18,13 @@ class PackageTrackApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
         fontFamily: 'Roboto',
       ),
-      // O nosso "gestor de trânsito" entra aqui!
+
+      // "gestor de trânsito"
       home: const ResponsiveLayout(
-        mobileBody: PackageListScreen(), // O primeiro código que te dei
-        webBody: WebDashboardScreen(),   // O segundo código que te dei
+        mobileBody: PackageListScreen(),
+        webBody: WebDashboardScreen(), 
       ),
+
       debugShowCheckedModeBanner: false,
     );
   }
