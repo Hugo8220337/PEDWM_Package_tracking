@@ -1,13 +1,13 @@
 # --- Variáveis de Configuração ---
-DB_URL=postgres://myuser:secret@localhost/greenlight?sslmode=disable
+DB_URL=postgres://myuser:secret@localhost:5435/greenlight?sslmode=disable
 MIGRATIONS_PATH=./migrations
 SWAG_MAIN=./cmd/server/main.go
 
 # Variáveis de Ambiente para o run-local
 export REDIS_HOST=localhost
-export POSTGRES_DB=go_app_dev
-export POSTGRES_USER=docker
-export POSTGRES_PASSWORD=password
+export POSTGRES_DB=greenlight
+export POSTGRES_USER=myuser
+export POSTGRES_PASSWORD=secret
 export POSTGRES_PORT=5435
 export POSTGRES_HOST=localhost
 export JWT_SECRET_KEY=ObL89O3nOSSEj6tbdHako0cXtPErzBUfq8l8o/3KD9g=INSECURE
@@ -23,44 +23,44 @@ setup:
 	go get -u github.com/swaggo/files
 	go mod tidy
 
-# --- Banco de Dados (Migrations) ---
+# --- Base de Dados (Migrations) ---
 migrate-up:
-	podman run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
+	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
 		-path=/migrations/ -database "$(DB_URL)" up
 
 migrate-down:
-	podman run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
+	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
 		-path=/migrations/ -database "$(DB_URL)" down 1
 
 migrate-create:
-	podman run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" docker.io/migrate/migrate \
+	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" docker.io/migrate/migrate \
 		create -ext sql -dir /migrations/ -seq $(name)
 migrate-version:
-	podman run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
+	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
 		-path=/migrations/ -database "$(DB_URL)" version
 migrate-goto:
-	podman run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
+	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
 		-path=/migrations/ -database "$(DB_URL)" goto $(version)
 
 # --- Desenvolvimento Local ---
 run-local:
-	podman start dockerPostgres || true
-	podman start dockerRedis || true
-	podman start dockerMongo || true
+	docker start dockerPostgres || true
+	docker start dockerRedis || true
+	docker start dockerMongo || true
 	go run $(SWAG_MAIN)
 
-# --- Docker / Podman Compose ---
+# --- Docker / docker Compose ---
 build-docker:
-	podman-compose build --no-cache
+	docker-compose build --no-cache
 
 up:
-	podman-compose up -d
+	docker-compose up -d
 
 down:
-	podman-compose down
+	docker-compose down
 
 restart:
-	podman-compose restart
+	docker-compose restart
 
 # --- Build e Testes ---
 build:
@@ -70,7 +70,7 @@ test:
 	go test -v ./... -race -cover
 
 clean:
-	podman stop go-rest-api-template dockerPostgres dockerRedis || true
-	podman rm go-rest-api-template dockerPostgres dockerRedis || true
-	podman image rm golang-rest-api-template-backend || true
+	docker stop go-rest-api-template dockerPostgres dockerRedis || true
+	docker rm go-rest-api-template dockerPostgres dockerRedis || true
+	docker image rm golang-rest-api-template-backend || true
 	rm -rf .dbdata

@@ -20,9 +20,9 @@ services:
       - go-network
 
   postgres:
-    image: docker.io/library/postgres
+    image: docker.io/library/postgres:17
     environment:
-      - POSTGRES_ROOT_PASSWORD=greenlight
+      - POSTGRES_DB=greenlight
       - POSTGRES_USER=myuser
       - POSTGRES_PASSWORD=secret
     ports:
