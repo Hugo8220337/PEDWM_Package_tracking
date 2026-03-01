@@ -1,6 +1,6 @@
 # --- Variáveis de Configuração ---
 DB_URL=postgres://myuser:secret@localhost:5435/greenlight?sslmode=disable
-MIGRATIONS_PATH=./migrations
+MIGRATIONS_PATH=./db/migrations
 SWAG_MAIN=./cmd/server/main.go
 
 # Variáveis de Ambiente para o run-local
@@ -41,6 +41,14 @@ migrate-version:
 migrate-goto:
 	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
 		-path=/migrations/ -database "$(DB_URL)" goto $(version)
+
+migrate-force:
+	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
+		-path=/migrations/ -database "$(DB_URL)" force $(version)
+		
+# --- SQLC ---
+sqlc-generate:
+	docker run --rm -v "$(PWD):/src" -w /src docker.io/sqlc/sqlc:latest generate
 
 # --- Desenvolvimento Local ---
 run-local:

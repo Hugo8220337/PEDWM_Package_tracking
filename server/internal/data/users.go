@@ -12,7 +12,7 @@ import (
 
 // Define a custom ErrDuplicateEmail error.
 var (
-	ErrDuplicateEmail = errors.New("duplicate email")
+	ErrDuplicateEmail = errors.New("duplicate email") // TODO fmt.Errof, dá contexto, diz a stack, é melhor do que esta abordagem
 )
 
 // Define a User struct to represent an individual user. Importantly, notice how we are
