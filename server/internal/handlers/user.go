@@ -8,30 +8,33 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Estas Structs servem como injeção de dependências para os handlers
 type UserHandler struct {
 	Queries *db.Queries
 	Logger  *log.Logger
 }
 
+type UserRequest struct {
+	Name         string `json:"name" binding:"required,max=100"`
+	Email        string `json:"email" binding:"required,email"`
+	PasswordHash string `json:"password_hash" binding:"required"`
+	Activated    bool   `json:"activated" binding:"required"`
+}
+
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var input struct {
-		Name         string `json:"name"`
-		Email        string `json:"email"`
-		PasswordHash []byte `json:"password_hash"`
-		Activated    bool   `json:"activated"`
-	}
 
 	// Bind the JSON payload to the input struct. If there is an error during binding, return a 400 Bad Request response with an error message.
-	if err := c.BindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos"})
+	var input UserRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "details": FormatValidationError(err)})
 		return
 	}
 
 	user, err := h.Queries.CreateUser(c.Request.Context(), db.CreateUserParams{
 		Name:         input.Name,
 		Email:        input.Email,
-		PasswordHash: []byte("teste"),
-		Activated:    true,
+		PasswordHash: []byte(input.PasswordHash),
+		Activated:    input.Activated,
 	})
 
 	if err != nil {

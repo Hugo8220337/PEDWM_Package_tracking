@@ -2,7 +2,6 @@ package main
 
 import (
 	db "basicAPI/db/sqlc"
-	"basicAPI/internal/data"
 	"basicAPI/internal/handlers"
 	"context"
 	"flag"
@@ -36,7 +35,6 @@ type config struct {
 type application struct {
 	config   config
 	logger   *log.Logger
-	models   data.Models
 	queries  *db.Queries         // O que o SQLC gera
 	handlers *handlers.Container // Container de Handlers, que tem os handlers de cada recurso da API
 }

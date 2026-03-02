@@ -9,7 +9,9 @@ import (
 
 // Container guarda todos os handlers da aplicação
 type Container struct {
-	User *UserHandler
+	User        *UserHandler
+	Movie       *MovieHandler
+	HealthCheck *HealthCheckHandler
 	// Product *ProductHandler
 	// Auth    *AuthHandler
 }
@@ -17,9 +19,18 @@ type Container struct {
 // NewContainer centraliza a criação de todos os handlers
 func NewContainer(queries *db.Queries, logger *log.Logger) *Container {
 	return &Container{
+		HealthCheck: &HealthCheckHandler{
+			Queries: queries,
+			Logger:  logger,
+		},
 		User: &UserHandler{
 			Queries: queries,
-			Logger:  logger, // Injetamos o logger aqui
+			Logger:  logger,
+		},
+
+		Movie: &MovieHandler{
+			Queries: queries,
+			Logger:  logger,
 		},
 	}
 }
