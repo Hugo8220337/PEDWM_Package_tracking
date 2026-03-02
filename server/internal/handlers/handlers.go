@@ -2,7 +2,7 @@ package handlers
 
 import (
 	db "basicAPI/db/sqlc"
-	"log"
+	"log/slog"
 )
 
 // Usa o padrão de injeção de dependências para criar handlers que dependem das queries da base de dados
@@ -17,7 +17,7 @@ type Container struct {
 }
 
 // NewContainer centraliza a criação de todos os handlers
-func NewContainer(queries *db.Queries, logger *log.Logger) *Container {
+func NewContainer(queries *db.Queries, logger *slog.Logger) *Container {
 	return &Container{
 		HealthCheck: &HealthCheckHandler{
 			Queries: queries,

@@ -6,7 +6,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -34,7 +34,7 @@ type config struct {
 // This is a Singleton, so we only have one instance of it in the application.
 type application struct {
 	config   config
-	logger   *log.Logger
+	logger   *slog.Logger
 	queries  *db.Queries         // O que o SQLC gera
 	handlers *handlers.Container // Container de Handlers, que tem os handlers de cada recurso da API
 }
@@ -58,12 +58,16 @@ func main() {
 
 	flag.Parse()
 
-	logger := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+	// Criar um logger que cospe JSON para o Stdout
+	jsonHandler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo, // Em prod, podes mudar isto via var de ambiente
+	})
+	logger := slog.New(jsonHandler)
 
 	// Configure Database Connection Pool
 	dbConn, err := openDB(cfg)
 	if err != nil {
-		logger.Fatal(err)
+		logger.Error("Unable to connect to database", "error", err.Error())
 	}
 	defer dbConn.Close()
 
@@ -84,7 +88,7 @@ func main() {
 	// Execute HTTP Server
 	err = app.serve()
 	if err != nil {
-		logger.Fatal(err)
+		logger.Error("Server Error", "error", err.Error())
 	}
 }
 
@@ -97,7 +101,7 @@ func (app *application) serve() error {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	app.logger.Printf("starting %s server on %s", app.config.env, srv.Addr)
+	app.logger.Info("starting server", "environment", app.config.env, "address", srv.Addr)
 	return srv.ListenAndServe()
 }
 

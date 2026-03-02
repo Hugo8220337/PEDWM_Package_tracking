@@ -2,7 +2,7 @@ package handlers
 
 import (
 	db "basicAPI/db/sqlc"
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,7 +11,7 @@ import (
 // Estas Structs servem como injeção de dependências para os handlers
 type UserHandler struct {
 	Queries *db.Queries
-	Logger  *log.Logger
+	Logger  *slog.Logger
 }
 
 type UserRequest struct {
@@ -38,7 +38,10 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	})
 
 	if err != nil {
-		h.Logger.Printf("ERROR: handlers.CreateUser: %v", err)
+		h.Logger.Warn("Error while creating user",
+			slog.String("error", err.Error()),
+			slog.String("email", input.Email),
+		)
 
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao processar o pedido"})
 		return

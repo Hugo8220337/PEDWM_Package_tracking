@@ -2,7 +2,7 @@ package handlers
 
 import (
 	db "basicAPI/db/sqlc"
-	"log"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 
 type HealthCheckHandler struct {
 	Queries *db.Queries
-	Logger  *log.Logger
+	Logger  *slog.Logger
 }
 
 type HealthCheckResponse struct {

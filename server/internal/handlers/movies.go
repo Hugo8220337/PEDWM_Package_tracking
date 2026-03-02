@@ -4,7 +4,7 @@ import (
 	db "basicAPI/db/sqlc"
 	"database/sql"
 	"errors"
-	"log"
+	"log/slog"
 	"net/http"
 	"strconv"
 
@@ -13,7 +13,7 @@ import (
 
 type MovieHandler struct {
 	Queries *db.Queries
-	Logger  *log.Logger
+	Logger  *slog.Logger
 }
 
 // Serve como DTO
@@ -43,7 +43,10 @@ func (h *MovieHandler) ShowMovie(c *gin.Context) {
 		}
 
 		// Se não for "Not Found", então sim, é um erro interno (500)
-		h.Logger.Printf("ERROR: handlers.ShowMovie: %v", err)
+		h.Logger.Warn("iInvalid ID or error fetching movie",
+			slog.String("param_id", id),
+			slog.String("client_ip", c.ClientIP()),
+		)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while processing the request"})
 		return
 	}
@@ -61,7 +64,9 @@ func (h *MovieHandler) ListMovies(c *gin.Context) {
 
 	movies, err := h.Queries.ListMovies(c.Request.Context(), arg)
 	if err != nil {
-		h.Logger.Printf("ERROR: handlers.listMovies: %v", err)
+		h.Logger.Warn("Erro while fetching movies",
+			slog.String("error", err.Error()),
+		)
 
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while fetching movies"})
 		return
@@ -86,7 +91,10 @@ func (h *MovieHandler) CreateMovie(c *gin.Context) {
 	})
 
 	if err != nil {
-		h.Logger.Printf("ERROR: handlers.CreateMovie: %v", err)
+		h.Logger.Warn("Error while creating movie",
+			slog.String("error", err.Error()),
+			slog.String("title", input.Title),
+		)
 
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating movie"})
 		return
@@ -126,7 +134,10 @@ func (h *MovieHandler) UpdateMovie(c *gin.Context) {
 			return
 		}
 
-		h.Logger.Printf("ERROR: handlers.UpdateMovie: %v", err)
+		h.Logger.Warn("Error while updating movie",
+			slog.String("error", err.Error()),
+			slog.String("title", input.Title),
+		)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while updating movie"})
 		return
 	}
@@ -145,7 +156,9 @@ func (h *MovieHandler) DeleteMovie(c *gin.Context) {
 
 	err = h.Queries.DeleteMovie(c.Request.Context(), idInt)
 	if err != nil {
-		h.Logger.Printf("ERROR: handlers.DeleteMovie: %v", err)
+		h.Logger.Warn("Error while deleting movie",
+			slog.String("error", err.Error()),
+		)
 
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while deleting movie"})
 		return
