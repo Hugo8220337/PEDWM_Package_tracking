@@ -26,7 +26,11 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	// Bind the JSON payload to the input struct. If there is an error during binding, return a 400 Bad Request response with an error message.
 	var input UserRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "details": FormatValidationError(err)})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"error":   "Invalid Input",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -43,7 +47,11 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 			slog.String("email", input.Email),
 		)
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao processar o pedido"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"error":   "Error while creating user",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 

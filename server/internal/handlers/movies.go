@@ -30,24 +30,36 @@ func (h *MovieHandler) ShowMovie(c *gin.Context) {
 	// convert id string to int64
 	idInt, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"error":   "Invalid ID",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
 	movie, err := h.Queries.GetMovie(c.Request.Context(), idInt)
 	if err != nil {
-		// VERIFICAÇÃO DO 404 AQUI:
+		// 404 Verification (sql.ErrNoRows))
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+			c.JSON(http.StatusNotFound, gin.H{
+				"status":  http.StatusNotFound,
+				"error":   "Movie not found",
+				"details": FormatValidationError(err),
+			})
 			return
 		}
 
 		// Se não for "Not Found", então sim, é um erro interno (500)
-		h.Logger.Warn("iInvalid ID or error fetching movie",
+		h.Logger.Warn("Invalid ID or error fetching movie",
 			slog.String("param_id", id),
 			slog.String("client_ip", c.ClientIP()),
 		)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while processing the request"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"error":   "Error while processing the request",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -64,11 +76,15 @@ func (h *MovieHandler) ListMovies(c *gin.Context) {
 
 	movies, err := h.Queries.ListMovies(c.Request.Context(), arg)
 	if err != nil {
-		h.Logger.Warn("Erro while fetching movies",
+		h.Logger.Warn("Error while fetching movies",
 			slog.String("error", err.Error()),
 		)
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while fetching movies"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"error":   "Error while fetching movies",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -79,7 +95,11 @@ func (h *MovieHandler) CreateMovie(c *gin.Context) {
 	var input MovieRequest
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "details": FormatValidationError(err)})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"error":   "Invalid request body",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -96,7 +116,11 @@ func (h *MovieHandler) CreateMovie(c *gin.Context) {
 			slog.String("title", input.Title),
 		)
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while creating movie"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"error":   "Error while creating movie",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -109,13 +133,21 @@ func (h *MovieHandler) UpdateMovie(c *gin.Context) {
 	// convert id string to int64
 	idInt, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"error":   "Invalid ID",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
 	var input MovieRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body", "details": FormatValidationError(err)})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"error":   "Invalid request body",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -130,7 +162,11 @@ func (h *MovieHandler) UpdateMovie(c *gin.Context) {
 	if err != nil {
 		// Se tentou atualizar um ID que não existe na BD
 		if errors.Is(err, sql.ErrNoRows) {
-			c.JSON(http.StatusNotFound, gin.H{"error": "Movie not found"})
+			c.JSON(http.StatusNotFound, gin.H{
+				"status":  http.StatusNotFound,
+				"error":   "Movie not found",
+				"details": FormatValidationError(err),
+			})
 			return
 		}
 
@@ -138,7 +174,11 @@ func (h *MovieHandler) UpdateMovie(c *gin.Context) {
 			slog.String("error", err.Error()),
 			slog.String("title", input.Title),
 		)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while updating movie"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"error":   "Error while updating movie",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -150,7 +190,11 @@ func (h *MovieHandler) DeleteMovie(c *gin.Context) {
 
 	idInt, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  http.StatusBadRequest,
+			"error":   "Invalid ID",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
@@ -160,7 +204,11 @@ func (h *MovieHandler) DeleteMovie(c *gin.Context) {
 			slog.String("error", err.Error()),
 		)
 
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error while deleting movie"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"error":   "Error while deleting movie",
+			"details": FormatValidationError(err),
+		})
 		return
 	}
 
