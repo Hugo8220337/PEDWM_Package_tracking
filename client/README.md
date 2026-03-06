@@ -22,3 +22,6 @@ lib/
 │       └── widgets/    # ex: package_card.dart (Usado tanto no mobile como na web)
 │
 └── main.dart           # O ponto de entrada que arranca a aplicação
+
+# How to run the App
+> flutter run -d web-server

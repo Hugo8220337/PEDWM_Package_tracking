@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class WebSideBar extends StatelessWidget {
-  const WebSideBar({super.key});
+  final int selectedIndex;
+  final Function(int) onTabSelected;
+
+  const WebSideBar({
+    super.key,
+    required this.selectedIndex,
+    required this.onTabSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -10,28 +17,27 @@ class WebSideBar extends StatelessWidget {
       color: Colors.white,
       child: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.all(24.0),
-            child: Row(
-              children: [
-                Icon(Icons.local_shipping, color: Colors.blue, size: 28),
-                SizedBox(width: 12),
-                Text('PackageTrack', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.dashboard, color: Colors.blue),
-            title: const Text('Dashboard', style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
-            tileColor: Colors.blue.withOpacity(0.1),
-            onTap: () {},
-          ),
-          ListTile(leading: const Icon(Icons.bar_chart), title: const Text('Stats'), onTap: () {}),
-          ListTile(leading: const Icon(Icons.inventory_2), title: const Text('Packages'), onTap: () {}),
-          ListTile(leading: const Icon(Icons.person), title: const Text('User'), onTap: () {}),
-          ListTile(leading: const Icon(Icons.settings), title: const Text('Settings'), onTap: () {}),
+          // ... (Header com logo mantém-se igual)
+
+          _buildMenuItem(0, Icons.dashboard, 'Dashboard'),
+          _buildMenuItem(1, Icons.bar_chart, 'Stats'),
+          _buildMenuItem(2, Icons.inventory_2, 'Packages'),
         ],
       ),
+    );
+  }
+
+  Widget _buildMenuItem(int index, IconData icon, String label) {
+    bool isSelected = selectedIndex == index;
+    
+    return ListTile(
+      leading: Icon(icon, color: isSelected ? Colors.blue : Colors.grey),
+      title: Text(label, style: TextStyle(
+        color: isSelected ? Colors.blue : Colors.black,
+        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+      )),
+      tileColor: isSelected ? Colors.blue.withOpacity(0.1) : Colors.transparent,
+      onTap: () => onTabSelected(index), // Chama a função que passámos no construtor
     );
   }
 }

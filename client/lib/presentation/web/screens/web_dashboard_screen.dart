@@ -1,62 +1,44 @@
-import 'package:client/presentation/web/widgets/map_placeholder_widget.dart';
-import 'package:client/presentation/web/widgets/package_table_widget.dart';
-import 'package:client/presentation/web/widgets/tracking_events_widget.dart';
-import 'package:client/presentation/web/widgets/web_header.dart';
+import 'package:client/presentation/web/screens/tabs/main_tab.dart';
 import 'package:client/presentation/web/widgets/web_side_bar.dart';
 import 'package:flutter/material.dart';
 
-class WebDashboardScreen extends StatelessWidget {
+class WebDashboardScreen extends StatefulWidget {
   const WebDashboardScreen({super.key});
+
+  @override
+  State<WebDashboardScreen> createState() => _WebDashboardScreenState();
+}
+
+class _WebDashboardScreenState extends State<WebDashboardScreen> {
+  // 1. Variável para guardar o índice da aba atual
+  int _selectedIndex = 0;
+
+  // 2. Lista de Widgets que representam cada "página"
+  final List<Widget> _screens = [
+    const MainTab(),       // Index 0: Dashboard
+    // const StatsScreen(),   // Index 1 (terá de criar este widget)
+    // const PackageScreen(), // Index 2
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA), // Fundo cinzento claro
+      backgroundColor: const Color(0xFFF5F7FA),
       body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. Barra Lateral Esquerda (Sidebar)
-          const WebSideBar(),
-          
-          // 2. Área Central de Conteúdo
+          // Passamos a função de mudar de aba para a Sidebar
+          WebSideBar(
+            selectedIndex: _selectedIndex,
+            onTabSelected: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
+
+          // Mostramos apenas o widget correspondente ao index
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Cabeçalho (Título e Pesquisa)
-                  const WebHeader(),
-                  const SizedBox(height: 24),
-                  
-                  // Zona dividida: Tabela (Esquerda) e Mapa/Eventos (Direita)
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Tabela de Encomendas (60% da largura)
-                        Expanded(
-                          flex: 3,
-                          child: const PackageTableWidget(),
-                        ),
-                        const SizedBox(width: 24),
-                        // Mapa e Histórico (40% da largura)
-                        Expanded(
-                          flex: 2,
-                          child: Column(
-                            children: [
-                              const MapPlaceholderWidget(),
-                              const SizedBox(height: 24),
-                              Expanded(child: const TrackingEventsWidget()),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: _screens[_selectedIndex],
           ),
         ],
       ),

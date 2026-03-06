@@ -6,15 +6,15 @@ Table users {
   id int [pk, increment]
   name varchar
   email varchar [unique]
-  role varchar [note: 'admin ou customer']
+  password_hash varchar
+  role Roles
   created_at timestamp
 }
 
 Table packages {
   id int [pk, increment]
-  tracking_number varchar [unique, note: 'Ex: PT123456789']
+  tracking_code varchar [unique, note: 'Ex: PT123456789']
   user_id int [ref: > users.id, note: 'A quem pertence a encomenda']
-  current_status varchar [note: 'Ex: pending, in_transit, delivered']
   destination_address varchar
   created_at timestamp
 }
@@ -22,7 +22,21 @@ Table packages {
 Table tracking_events {
   id int [pk, increment]
   package_id int [ref: > packages.id, note: 'A que encomenda pertence este evento']
-  status varchar [note: 'Ex: Saiu do centro de distribuição']
+  status Tracking_Status [note: '(Um Enum: PENDENTE, EM_TRANSITO, EM_DISTRIBUICAO, ENTREGUE, CANCELADO)']
   location varchar [note: 'Ex: Lisboa, PT (ou coordenadas GPS)']
+  descricao varchar []
   created_at timestamp
+}
+
+enum Tracking_Status {
+  pending
+  cancelled
+  in_transit
+  in_distribution
+  delivered
+}
+
+enum Roles {
+  user
+  courier
 }
