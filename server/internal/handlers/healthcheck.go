@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	db "basicAPI/db/sqlc"
+	"basicAPI/ent"
 	"log/slog"
 	"net/http"
 
@@ -9,8 +9,8 @@ import (
 )
 
 type HealthCheckHandler struct {
-	Queries *db.Queries
-	Logger  *slog.Logger
+	Client *ent.Client
+	Logger *slog.Logger
 }
 
 type HealthCheckResponse struct {

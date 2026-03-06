@@ -40,9 +40,6 @@ Directories, under golang documentation:
 - README.md
 
 Dependencies:
-    System:
-        - `brew install golang-migrate`
-    
     dev:
         - `go get -d ./...`
 
@@ -53,15 +50,13 @@ notes:
 build and run the docker containers:
     - `make up` <!--TODO ainda não configurei isto-->
 
-## Migration Commands:
-Add Migration:
-    - `make migrate-create name=<migration_name>`
-Execute Migration up:
-    - `make migrate-up`
-Roll All Migrations Down:
-    - `make migrate down`
-See Migration version currently using:
-    - `make migrate-version`
-Roll Migration to specific version:
-    - `make migrate-goto version=<<version_number>>`
->> Fiz estes comandos no goto, porque para instalar o package migrate é preciso o homebrew, e é difícil de instalar. O Makefile vai ao container do migrate então não é preciso instalar
+## Basic Commands
+Como correr a aplicação
+- `go run ./cmd/api`
+ 
+## Ent Commands
+Create New Entity:
+- `go run entgo.io/ent/cmd/ent new «PackageName»`
+
+Gerar Código:
+- `go generate ./ent`

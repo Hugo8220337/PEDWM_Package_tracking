@@ -16,15 +16,8 @@ func setupRouter(h *handlers.Container) *gin.Engine {
 	// Health Check Endpoint
 	r.GET("/v1/healthcheck", h.HealthCheck.HealthCheck)
 
-	// Movie Endpoints
-	r.GET("/v1/movies", h.Movie.ListMovies)
-	r.POST("/v1/movies", h.Movie.CreateMovie)
-	r.GET("/v1/movies/:id", h.Movie.ShowMovie)
-	r.PUT("/v1/movies/:id", h.Movie.UpdateMovie)
-	r.DELETE("/v1/movies/:id", h.Movie.DeleteMovie)
-
-	// User Endpoints
-	r.POST("/v1/users", h.User.CreateUser)
-
+	// Parcel Endpoints
+	r.POST("/v1/parcels", h.Parcel.CreateParcel)
+	r.GET("/v1/parcels/:code", h.Parcel.ShowParcel)
 	return r
 }

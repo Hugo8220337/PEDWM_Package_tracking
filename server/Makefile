@@ -22,33 +22,7 @@ setup:
 	go get -u github.com/swaggo/gin-swagger
 	go get -u github.com/swaggo/files
 	go mod tidy
-
-# --- Base de Dados (Migrations) ---
-migrate-up:
-	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
-		-path=/migrations/ -database "$(DB_URL)" up
-
-migrate-down:
-	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
-		-path=/migrations/ -database "$(DB_URL)" down 1
-
-migrate-create:
-	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" docker.io/migrate/migrate \
-		create -ext sql -dir /migrations/ -seq $(name)
-migrate-version:
-	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
-		-path=/migrations/ -database "$(DB_URL)" version
-migrate-goto:
-	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
-		-path=/migrations/ -database "$(DB_URL)" goto $(version)
-
-migrate-force:
-	docker run --rm -v "$(PWD)/$(MIGRATIONS_PATH):/migrations" --network host docker.io/migrate/migrate \
-		-path=/migrations/ -database "$(DB_URL)" force $(version)
 		
-# --- SQLC ---
-sqlc-generate:
-	docker run --rm -v "$(PWD):/src" -w /src docker.io/sqlc/sqlc:latest generate
 
 # --- Desenvolvimento Local ---
 run-local:

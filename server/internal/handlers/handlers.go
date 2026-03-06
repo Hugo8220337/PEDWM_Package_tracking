@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	db "basicAPI/db/sqlc"
+	"basicAPI/ent"
 	"log/slog"
 )
 
@@ -9,28 +9,23 @@ import (
 
 // Container guarda todos os handlers da aplicação
 type Container struct {
-	User        *UserHandler
-	Movie       *MovieHandler
 	HealthCheck *HealthCheckHandler
+	Parcel      *ParcelHandler
 	// Product *ProductHandler
 	// Auth    *AuthHandler
 }
 
 // NewContainer centraliza a criação de todos os handlers
-func NewContainer(queries *db.Queries, logger *slog.Logger) *Container {
+func NewContainer(client *ent.Client, logger *slog.Logger) *Container {
 	return &Container{
 		HealthCheck: &HealthCheckHandler{
-			Queries: queries,
-			Logger:  logger,
-		},
-		User: &UserHandler{
-			Queries: queries,
-			Logger:  logger,
+			Client: client,
+			Logger: logger,
 		},
 
-		Movie: &MovieHandler{
-			Queries: queries,
-			Logger:  logger,
+		Parcel: &ParcelHandler{ // <-- 2. Inicializar com as dependências
+			Client: client,
+			Logger: logger,
 		},
 	}
 }
