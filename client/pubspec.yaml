@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter_map: ^8.2.2 # Necessário para exibir o mapa com o OpenStreetMaps
   latlong2: ^0.9.1 # Necessário para lidar com coordenadas com o OpenStreetMaps
+  fluttertoast: ^9.0.0 # Mensagens de erro e sucesso
   flutter:
     sdk: flutter
 

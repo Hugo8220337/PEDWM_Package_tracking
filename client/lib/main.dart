@@ -1,6 +1,7 @@
 import 'package:client/presentation/mobile/screens/mobile_dashboard_screen.dart';
 import 'package:client/presentation/web/screens/web_dashboard_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const PackageTrackApp());
@@ -12,6 +13,7 @@ class PackageTrackApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: FToastBuilder(), // Necessário para usar FlutterToast em toda a aplicação
       title: 'PackageTrack',
       theme: ThemeData(
         primaryColor: const Color(0xFF1976D2),
