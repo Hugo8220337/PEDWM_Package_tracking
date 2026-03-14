@@ -11,17 +11,21 @@ class InitialPageViewmodel extends BaseViewModel {
     setLoading(true);
     clearError();
 
-    if (code == "Let there be light") {
-      await createPackage();
-    } else {
-      // setError('Invalid tracking code');
-      // Simula um processo de validação e busca de dados
-      await Future.delayed(const Duration(seconds: 2));
+    try {
+      if (code == "Let there be light") {
+        await createPackage();
+        // router.go('/map', extra: {'trackingCode': "TODO: Passar o código real aqui"}); // TODO
+      } else {
+        // setError('Invalid tracking code');
+        // Simula um processo de validação e busca de dados
+        await Future.delayed(const Duration(seconds: 2));
+      }
+    } catch(e) {
+      setError('An error occurred: $e');
     }
-
-    // Aqui você pode adicionar a lógica para validar o código e buscar os dados necessários
-
-    setLoading(false);
+     finally {
+      setLoading(false);
+    }
   }
 
   Future<void> createPackage() async {

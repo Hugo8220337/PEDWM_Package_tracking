@@ -1,7 +1,9 @@
 import 'package:client/config/dependency_injection.dart';
+import 'package:client/core/constants/routes_constants.dart';
 import 'package:client/presentation/viewmodels/initial_page_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class InitialScreen extends StatelessWidget {
@@ -82,8 +84,12 @@ class _InitialScreenBodyState extends State<_InitialScreenBody> {
                       toastLength: Toast.LENGTH_LONG,
                       msg: 'Feito com sucesso!',
                       webBgColor: 'linear-gradient(to right, #4CAF50, #81C784)',
+                      webPosition: 'center',
                       textColor: Colors.white,
                     );
+
+                    // go to Map Screen with the packageId as a parameter
+                    context.goNamed(RoutesConstants.mapScreen, pathParameters: {'packageId': 'PT123456789'}); // TODO: Passar o código real aqui
                   },
                 ),
               ],

@@ -40,6 +40,9 @@ dependencies:
 
   # HTTP client
   dio: ^5.3.0
+
+  # Navigation
+  go_router: ^10.1.2
   
   # JSON serialization
   json_annotation: ^4.8.1

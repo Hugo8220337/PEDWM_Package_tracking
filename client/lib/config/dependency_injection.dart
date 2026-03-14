@@ -28,7 +28,7 @@ class DI {
     // ViewModels
     // Uso o factory para criar uma nova instância sempre que pedir, invés de colocar um singleton e estar sempre em memória
     instance.registerFactory(() => InitialPageViewmodel(
-      dio: instance<Dio>(), // Injetar a dependência do Dio no ViewModel
+      dio: instance<Dio>() // Injetar a dependência do Dio no ViewModel
     ));
 
   }

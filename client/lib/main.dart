@@ -1,11 +1,17 @@
 import 'package:client/config/dependency_injection.dart';
 import 'package:client/core/constants/app_constants.dart';
-import 'package:client/presentation/views/initial_screen.dart';
+import 'package:client/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
+  // Garante que o Flutter está pronto para executar código antes do runApp
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Chamar a inicialização do GetIt ANTES de arrancar a App
   DI.initialize();
+  
+  // Arrancar a aplicação
   runApp(const PackageTrackApp());
 }
 
@@ -14,7 +20,8 @@ class PackageTrackApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: AppRouter.router, 
       builder: FToastBuilder(), // Necessário para usar FlutterToast em toda a aplicação
       title: AppConstants.appName,
       theme: ThemeData(
@@ -24,7 +31,7 @@ class PackageTrackApp extends StatelessWidget {
       ),
 
       // main page
-      home: InitialScreen(),
+      // home: InitialScreen(),
 
       debugShowCheckedModeBanner: false,
     );
