@@ -23,7 +23,7 @@ func NewContainer(client *ent.Client, logger *slog.Logger) *Container {
 			Logger: logger,
 		},
 
-		Parcel: &ParcelHandler{ // <-- 2. Inicializar com as dependências
+		Parcel: &ParcelHandler{
 			Client: client,
 			Logger: logger,
 		},

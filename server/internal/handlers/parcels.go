@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"basicAPI/ent"
+	"basicAPI/internal/utils"
 
 	"basicAPI/ent/parcel"
 
@@ -22,13 +23,13 @@ type CreateParcelRequest struct {
 	TrackingNumber string `json:"tracking_number" binding:"required,min=5"`
 }
 
-// CreateParcel cria uma nova encomenda na base de dados
-func (h *ParcelHandler) CreateParcel(c *gin.Context) {
+// CreateRandomParcel cria uma nova encomenda na base de dados
+func (h *ParcelHandler) CreateRandomParcel(c *gin.Context) {
+	r := utils.RandomUtils{}
+
+	// Create Random Tracking Number for demonstration purposes
 	var input CreateParcelRequest
-	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Dados inválidos", "details": FormatValidationError(err)})
-		return
-	}
+	input.TrackingNumber = "TRK-" + r.RandomString(8) // Gerar um código de tracking aleatório
 
 	// A MAGIA DO ENT: Criar um registo de forma orientada a objetos
 	pkg, err := h.Client.Parcel.Create().
