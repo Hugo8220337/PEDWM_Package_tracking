@@ -31,6 +31,19 @@ dependencies:
   flutter_map: ^8.2.2 # Necessário para exibir o mapa com o OpenStreetMaps
   latlong2: ^0.9.1 # Necessário para lidar com coordenadas com o OpenStreetMaps
   fluttertoast: ^9.0.0 # Mensagens de erro e sucesso
+  
+  # State management
+  provider: ^6.0.5
+
+  # Dependency injection
+  get_it: ^7.6.0
+
+  # HTTP client
+  dio: ^5.3.0
+  
+  # JSON serialization
+  json_annotation: ^4.8.1
+
   flutter:
     sdk: flutter
 
@@ -42,6 +55,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Code generation
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+
+  # Testing
+  # mockito: ^5.4.2
+  # bloc_test: ^9.1.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -63,7 +84,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/testTab_Background.png
+    - assets/images/initial_screen_background.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

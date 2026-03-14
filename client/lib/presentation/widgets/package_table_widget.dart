@@ -1,5 +1,5 @@
 import 'package:client/data/models/test_http_model.dart';
-import 'package:client/presentation/web/viewmodels/sample_viewmodel.dart';
+import 'package:client/presentation/viewmodels/sample_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class PackageTableWidget extends StatefulWidget {

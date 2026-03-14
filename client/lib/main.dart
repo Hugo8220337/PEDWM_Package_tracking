@@ -1,9 +1,11 @@
-import 'package:client/presentation/mobile/screens/mobile_dashboard_screen.dart';
-import 'package:client/presentation/web/screens/web_dashboard_screen.dart';
+import 'package:client/config/dependency_injection.dart';
+import 'package:client/core/constants/app_constants.dart';
+import 'package:client/presentation/views/initial_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
+  DI.initialize();
   runApp(const PackageTrackApp());
 }
 
@@ -14,51 +16,17 @@ class PackageTrackApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       builder: FToastBuilder(), // Necessário para usar FlutterToast em toda a aplicação
-      title: 'PackageTrack',
+      title: AppConstants.appName,
       theme: ThemeData(
         primaryColor: const Color(0xFF1976D2),
         scaffoldBackgroundColor: const Color(0xFFF5F7FA),
         fontFamily: 'Roboto',
       ),
 
-      // "gestor de trânsito"
-      home: const ResponsiveLayout(
-        mobileBody: PackageListScreen(),
-        webBody: WebDashboardScreen(),
-        // webBody: TestDashboard(), 
-      ),
+      // main page
+      home: InitialScreen(),
 
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-// ==========================================
-// COMPONENTE RESPONSIVO (O "Cérebro" do Layout)
-// ==========================================
-class ResponsiveLayout extends StatelessWidget {
-  final Widget mobileBody;
-  final Widget webBody;
-
-  const ResponsiveLayout({
-    super.key,
-    required this.mobileBody,
-    required this.webBody,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Se a largura do ecrã for menor que 800 pixeis, assumimos que é Mobile/Tablet pequeno
-        if (constraints.maxWidth < 800) {
-          return mobileBody;
-        } 
-        // Se for maior que 800 pixeis, mostramos o Dashboard Web completo
-        else {
-          return webBody;
-        }
-      },
     );
   }
 }

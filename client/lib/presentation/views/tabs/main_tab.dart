@@ -1,6 +1,6 @@
-import 'package:client/presentation/web/widgets/package_table_widget.dart';
-import 'package:client/presentation/web/widgets/tracking_events_widget.dart';
-import 'package:client/presentation/web/widgets/web_header.dart';
+import 'package:client/presentation/widgets/package_table_widget.dart';
+import 'package:client/presentation/widgets/tracking_events_widget.dart';
+import 'package:client/presentation/widgets/web_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart'; // Importa o flutter_map
@@ -13,7 +13,6 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-  final LatLng _center = const LatLng(-23.5505, -46.6333); // Exemplo: São Paulo
 
   @override
   Widget build(BuildContext context) {
