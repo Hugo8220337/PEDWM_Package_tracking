@@ -17,7 +17,9 @@ class AppRouter {
         path: RoutesConstants.mapScreenRoute,
         builder: (context, state) {
           final packageId = state.pathParameters['packageId']!;
-          return MapScreen(packageId: packageId);
+          // return MapScreen(packageId: packageId);
+          return MapScreen();
+
         },
       ),
     ],
