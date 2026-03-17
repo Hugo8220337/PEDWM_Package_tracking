@@ -1,5 +1,6 @@
 import 'package:client/config/dio_client.dart';
 import 'package:client/presentation/viewmodels/initial_page_viewmodel.dart';
+import 'package:client/presentation/viewmodels/map_screen_viewmodel.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -30,6 +31,8 @@ class DI {
     instance.registerFactory(() => InitialPageViewmodel(
       dio: instance<Dio>() // Injetar a dependência do Dio no ViewModel
     ));
+
+    instance.registerFactory(() => MapScreenViewmodel());
 
   }
 }

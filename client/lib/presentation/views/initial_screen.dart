@@ -1,6 +1,7 @@
 import 'package:client/config/dependency_injection.dart';
 import 'package:client/core/constants/routes_constants.dart';
 import 'package:client/presentation/viewmodels/initial_page_viewmodel.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -82,7 +83,7 @@ class _InitialScreenBodyState extends State<_InitialScreenBody> {
                       timeInSecForIosWeb: 2,
                       gravity: ToastGravity.CENTER,
                       toastLength: Toast.LENGTH_LONG,
-                      msg: 'Feito com sucesso!',
+                      msg: 'operation_success'.tr(context: context),
                       webBgColor: 'linear-gradient(to right, #4CAF50, #81C784)',
                       webPosition: 'center',
                       textColor: Colors.white,
@@ -136,7 +137,7 @@ class _SubmitButton extends StatelessWidget {
             ? const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               )
-            : const Text('Submit'),
+            : Text('button_login'.tr(context: context)),
       ),
     );
   }
